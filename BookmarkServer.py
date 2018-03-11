@@ -5,6 +5,10 @@
 import http.server
 import requests
 import os
+import threading
+from socketserver import ThreadingMixIn
+
+
 from urllib.parse import unquote, parse_qs
 
 memory = {}
@@ -27,7 +31,8 @@ form = '''<!DOCTYPE html>
 {}
 </pre>
 '''
-
+class ThreadHTTPServer(ThreadingMixIn, http.server.HTTPServer):
+    "This is an HTTPServer that supports thread-based concurrency."
 
 def CheckURI(uri, timeout=5):
     '''Check whether this URI is reachable, i.e. does it return a 200 OK?
